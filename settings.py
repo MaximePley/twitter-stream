@@ -1,6 +1,5 @@
-TRACK_TERMS = ['#vegan', '#veganreceipe', '#veganfoodie', '#veganfood', '#vegancooking']
+TRACK_TERMS = []
 
-try:
-    from private import *
-except Exception:
-    pass
+# Put your own keywords to filter the Twitter stream
+TRACK_TERMS = "KEYWORDS1","KEYWORDSn"
+
