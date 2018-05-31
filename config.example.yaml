@@ -3,3 +3,7 @@ base: &base
   API_secretAccessKey: "XXX"
   API_tokenKeyId: "XXX"
   API_secretTokenKey: "XXX"
+  TrackTerms:
+  - keyword1
+  - keywordn
+

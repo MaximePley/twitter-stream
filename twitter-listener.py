@@ -1,10 +1,5 @@
-import settings
 import yaml
 import tweepy
-import dataset
-from sqlalchemy.exc import ProgrammingError
-import json
-import csv
 
 
 class StreamListener(tweepy.StreamListener):
@@ -36,8 +31,10 @@ class StreamListener(tweepy.StreamListener):
 
 with open('config.yaml', 'r') as f:
     doc = yaml.load(f)
-    print(doc["base"]["API_accessKeyId"], doc["base"]["API_secretAccessKey"])
-    print(doc["base"]["API_tokenKeyId"], doc["base"]["API_secretTokenKey"])
+
+
+hashtags = doc["base"]["TrackTerms"]
+print(hashtags)
 
 # Connection to Twitter API
 try:
@@ -49,7 +46,6 @@ except:
     print('Not connected')
 
 
-hashtags = settings.TRACK_TERMS
 f = open("results.txt", "w+")
 
 for keywords in hashtags:
