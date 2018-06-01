@@ -7,3 +7,9 @@ base: &base
   - keyword1
   - keywordn
 
+datastore:
+  text:
+    file_name: "Data_user.txt"
+  database:
+    host: localhost
+    port: 6379
