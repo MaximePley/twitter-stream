@@ -6,27 +6,39 @@ class StreamListener(tweepy.StreamListener):
 
     def on_status(self, status):
 
-        if not hasattr(status, 'retweeted_status'):
-            hashtags = status.entities['hashtags']
-            if hashtags != []:
-                text = status.text
-                name = status.user.screen_name
-                user_id = status.user.id
-                created = status.created_at
+        if hasattr(status, 'retweeted_status'):
+            return
 
-                # Test that reads the stream - put information in a text file
-                f = open("results.txt", "a")
-                f.write(str(name) + " " + str(user_id) + '\n' + str(created) + '\n' + str(text.encode("utf-8")) + '\n' + str(hashtags) + '\n\n')
-                f.close()
-                return
+        hashtags = status.entities['hashtags']
+        if hashtags == []:
+            return
 
-                # Follow request
-                # API.create_friendship(user_id)
+        text = status.text
+        name = status.user.screen_name
+        user_id = status.user.id
+        created = status.created_at
+
+        test("results.txt", name, user_id, created, text, hashtags)
 
     def on_error(self, status_code):
         if status_code == 420:
             # returning False in on_data disconnects the stream
             return False
+
+
+# Test that reads the stream - put information in a text file
+def test(file_name, name, user_id, created, text, hashtags):
+
+    f = open(file_name, "a")
+    f.write(str(name) + " " + str(user_id) + '\n' + str(created) + '\n' + str(text.encode("utf-8")) + '\n' + str(hashtags) + '\n\n')
+    f.close()
+    return
+
+
+# Follow request
+def follow(user_id):
+
+    API.create_friendship(user_id)
 
 
 # Read config parameters
