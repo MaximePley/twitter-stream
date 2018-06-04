@@ -1,9 +1,21 @@
-base: &base
-  API_accessKeyId: "XXX"
-  API_secretAccessKey: "XXX"
-  API_tokenKeyId: "XXX"
-  API_secretTokenKey: "XXX"
-  TrackTerms:
-  - keyword1
-  - keywordn
+trackTerms:
+  - 'keyword1'
+  - 'keyword2'
+
+twitter:
+  apiAccessKeyId: 'XXX'
+  apiSecretAccessKey: 'XXX'
+  apiTokenKeyId: 'XXX'
+  apiSecretTokenKey: 'XXX'
+
+datastore:
+  type: 'text'
+  text:
+    fileName: 'Data_user.txt'
+  database:
+    host: localhost
+    port: 6379
+
+logLevel:
+  level: 'INFO'
 
