@@ -9,7 +9,7 @@ twitter:
   apiSecretTokenKey: 'XXX'
 
 datastore:
-  type: 'text'
+  type: 'file'
   text:
     fileName: 'Data_user.txt'
   database:
