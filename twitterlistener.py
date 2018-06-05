@@ -1,8 +1,13 @@
 import logging
 import tweepy
+import database
 
 
 class StreamListener(tweepy.StreamListener):
+
+    def __init__(self, api, datastore):
+        self.api = api
+        self.datastore = datastore
 
     def on_status(self, status):
 
@@ -17,7 +22,7 @@ class StreamListener(tweepy.StreamListener):
         created = str(status.created_at)
         urls = status.entities['urls']
         user = {"User id": user_id, "Created": created, "Tweet url": urls}
-        return user
+        self.datastore.insertUser(user)
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -44,10 +49,10 @@ def connect(apiAccessKeyId, apiSecretAccessKey, apiTokenKeyId, apiSecretTokenKey
 
 
 # Stream listening
-def startStreaming(api, hashtags):
+def startStreaming(api, hashtags, datastore):
 
     try:
-        stream_listener = StreamListener()
+        stream_listener = StreamListener(api, datastore)
         stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
         stream.filter(track=hashtags, async=True)
         logging.info('Reading the stream')
