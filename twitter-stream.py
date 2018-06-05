@@ -8,33 +8,30 @@ import yaml
 
 def configRead():
 
-    trackTerms = []
-    twitter = []
-    datastore = []
-    logLevel = []
-
     if os.path.isfile('config.yaml'):
         with open('config.yaml', 'r') as f:
             doc = yaml.load(f)
-        trackTerms = doc['trackTerms']
-        twitter = doc['twitter']
-        datastore = doc['datastore']
-        logLevel = doc['logLevel']
-        return trackTerms, twitter, datastore, logLevel
+        config = {'trackTerms': doc['trackTerms'], 'twitter': doc['twitter'], 'datastore': doc['datastore'], 'logLevel': doc['logLevel']}
+        return config
     else:
         sys.exit('No config file')
 
 
-def logger(logLevel='INFO'):
+def setupLogger(logLevel='INFO'):
 
-    logging.basicConfig(filename='execution.log', format='%(asctime)s, %(message)s', level=logging.INFO)
+    logging.basicConfig(filename='execution.log', format='%(asctime)s, %(message)s')
     logging.getLogger().setLevel(logLevel)
-    return logger
+    return setupLogger
 
 
 if __name__ == "__main__":
-    configRead()
-    logger(configRead()[3]['level'])
-    api = twitterlistener.connect(configRead()[1]['apiAccessKeyId'], configRead()[1]['apiSecretAccessKey'], configRead()[1]['apiTokenKeyId'], configRead()[1]['apiSecretTokenKey'])
-    twitterlistener.startStreaming(api, configRead()[0])
-    # Call function that creates the datastore: datastore = storage.factory(config.datastore.type)
+    # Read the config
+    config = configRead()
+    # Set the logger
+    logger = setupLogger(configRead()['logLevel']['level'])
+    # Connect to the api
+    api = twitterlistener.connect(configRead()['twitter']['apiAccessKeyId'], configRead()['twitter']['apiSecretAccessKey'], configRead()['twitter']['apiTokenKeyId'], configRead()['twitter']['apiSecretTokenKey'])
+    # Connect the data storage
+    datastore = database.storageType(configRead()['datastore']['type'], configRead()['datastore']['text']['fileName'], configRead()['datastore']['database']['host'], configRead()['datastore']['database']['port'])
+    # Read the stream twitter
+    twitterlistener.startStreaming(api, configRead()['trackTerms'], datastore)
